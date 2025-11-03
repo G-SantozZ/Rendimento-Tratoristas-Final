@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Controle Agrícola</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #1e40af; --success: #16a34a; --bg: #f8fafc; --card: #ffffff; --border: #e2e8f0; --text: #1e293b; --radius: 0.75rem; --shadow: 0 4px 12px rgba(0,0,0,0.1); }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; width: 100%; max-width: 400px; box-shadow: var(--shadow); }
+    h1 { text-align: center; margin-bottom: 1.5rem; color: var(--primary); }
+    input { width: 100%; padding: 0.75rem; margin-bottom: 1rem; border: 1.5px solid var(--border); border-radius: var(--radius); font: inherit; }
+    input:focus { outline: none; border-color: var(--primary); }
+    button { width: 100%; padding: 0.75rem; background: var(--success); color: white; border: none; border-radius: var(--radius); font-weight: 700; cursor: pointer; }
+    button:hover { background: #15803d; }
+    .error { color: #dc2626; text-align: center; margin-top: 0.5rem; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Login</h1>
+    <input type="text" id="usuario" placeholder="Usuário" />
+    <input type="password" id="senha" placeholder="Senha" />
+    <button id="btn-login">Entrar</button>
+    <p class="error" id="erro"></p>
+  </div>
+
+  <script>
+    const USUARIOS = {
+      "admin": { senha: "admin123", fazendas: null, admin: true },
+      "gerente1": { senha: "123", fazendas: ["SLP", "IGARATA"], admin: false }
+    };
+
+    document.getElementById('btn-login').onclick = () => {
+      const usuario = document.getElementById('usuario').value.trim();
+      const senha = document.getElementById('senha').value;
+      const erro = document.getElementById('erro');
+
+      if (!usuario || !senha) return erro.textContent = "Preencha todos os campos.";
+
+      const user = USUARIOS[usuario];
+      if (!user || user.senha !== senha) return erro.textContent = "Usuário ou senha incorretos.";
+
+      localStorage.setItem('usuario_logado', usuario);
+      localStorage.setItem('is_admin', user.admin);
+      localStorage.setItem('fazendas_liberadas', JSON.stringify(user.fazendas || []));
+      window.location.href = 'painel.html';
+    };
+  </script>
+</body>
+</html>
